@@ -23,7 +23,10 @@ export interface RippleOptions {
   center?: boolean
   circle?: boolean
   ios?: boolean
+  stop?: boolean
 }
+
+let _stopPropagation = true
 
 function isTouchEvent (e: RippleEvent): e is TouchEvent {
   return e.constructor.name === 'TouchEvent'
@@ -54,6 +57,11 @@ function isSupport () {
   const { isIOS, version, isAndroid } = getBrowerInfo()
   const resVersion = window.parseInt(version)
   return (isIOS && resVersion >= 10) || (isAndroid && resVersion >= 5) || (!isAndroid && !isIOS)
+}
+
+function isEmpty (str: any) {
+  if (typeof str === 'undefined' || str === null || str === '') return true
+  return false
 }
 
 const calculate = (
@@ -178,6 +186,7 @@ function isRippleEnabled (value: any): value is true {
 }
 
 function rippleShow (e: RippleEvent) {
+  if (_stopPropagation) e.stopPropagation()
   const value: RippleOptions = {}
   const element = e.currentTarget as HTMLElement
   if (!element || !element._ripple || element._ripple.touched) return
@@ -199,6 +208,7 @@ function rippleShow (e: RippleEvent) {
 }
 
 function rippleHide (e: Event) {
+  if (_stopPropagation) e.stopPropagation()
   const element = e.currentTarget as HTMLElement | null
   if (!element || !element._ripple) return
 
@@ -294,6 +304,8 @@ function directive (el: HTMLElement, binding: VNodeDirective, node: VNode) {
   const value = binding.value || {}
   if (!value.ios && isIOS) return
   if (!isSupport()) return
+
+  _stopPropagation = isEmpty(value.stop) ? true : value.stop
 
   updateRipple(el, binding, false)
 
