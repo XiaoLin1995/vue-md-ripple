@@ -31,7 +31,7 @@ Vue.use(VueRipple)
 <template>
   <div>
     <div class="btn" v-ripple>Button</div>
-    <div class="btn" v-ripple="{center: true}">Center</div>
+    <div class="btn" v-ripple="{center: true, ios: true}">Center</div>
     <div class="btn" v-ripple style="color: red">Red Ripple</div>
   </div>
 </template>

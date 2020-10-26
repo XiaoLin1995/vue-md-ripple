@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="btn" v-ripple>Button</div>
+    <div class="btn" v-ripple="{ios: true}">Button</div>
     <div class="btn" v-ripple="{center: true}">Center</div>
 
     <div class="content" v-ripple>

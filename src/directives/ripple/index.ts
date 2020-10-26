@@ -22,6 +22,7 @@ export interface RippleOptions {
   class?: string
   center?: boolean
   circle?: boolean
+  ios?: boolean
 }
 
 function isTouchEvent (e: RippleEvent): e is TouchEvent {
@@ -52,7 +53,7 @@ function getBrowerInfo () {
 function isSupport () {
   const { isIOS, version, isAndroid } = getBrowerInfo()
   const resVersion = window.parseInt(version)
-  return (isIOS && resVersion) || (isAndroid && resVersion >= 5) || (!isAndroid && !isIOS)
+  return (isIOS && resVersion >= 10) || (isAndroid && resVersion >= 5) || (!isAndroid && !isIOS)
 }
 
 const calculate = (
@@ -289,6 +290,9 @@ function removeListeners (el: HTMLElement) {
 }
 
 function directive (el: HTMLElement, binding: VNodeDirective, node: VNode) {
+  const { isIOS } = getBrowerInfo()
+  const value = binding.value || {}
+  if (!value.ios && isIOS) return
   if (!isSupport()) return
 
   updateRipple(el, binding, false)
